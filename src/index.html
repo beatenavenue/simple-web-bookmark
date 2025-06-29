@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Bookmark</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript">
+      const defaultData = { bookmarks: [], config: { col: 3 } };
+      const data = defaultData;
+
+      function isValidUrl(str) {
+        try {
+          new URL(str);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function getFaviconUrl(url) {
+        try {
+          const u = new URL(url);
+          return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
+        } catch {
+          return "";
+        }
+      }
+
+      function addBookmark(event) {
+        event.preventDefault();
+
+        const urlDom = document.querySelector("#add_url");
+        const titleDom = document.querySelector("#add_title");
+        const url = urlDom.value;
+        const title = titleDom.value;
+
+        if (!url || !title) {
+          alert("URL & TITLE is required.");
+          return;
+        }
+
+        if (!isValidUrl(url)) {
+          alert("Not valid URL");
+          return;
+        }
+
+        urlDom.value = "";
+        titleDom.value = "";
+
+        data.bookmarks.push({
+          url,
+          title,
+        });
+
+        saveToLocalStorage();
+        draw();
+      }
+
+      function setLayout(event) {
+        event.preventDefault();
+
+        try {
+          const colDom = document.querySelector("#col");
+          const col = colDom.value;
+          data.config = { col };
+
+          saveToLocalStorage();
+          draw();
+        } catch (e) {
+          alert("Error.");
+        }
+      }
+
+      function setRaw(event) {
+        event.preventDefault();
+
+        const rawDom = document.querySelector("#raw");
+        const raw = JSON.parse(rawDom.value);
+        Object.assign(data, raw);
+
+        saveToLocalStorage();
+        draw();
+      }
+
+      function draw() {
+        const rawDom = document.querySelector("#raw");
+        rawDom.value = JSON.stringify(data);
+
+        const colDom = document.querySelector("#col");
+        colDom.value = data.config.col;
+
+        const bookmarks = [];
+        for (let i = 0; i < data.bookmarks.length; i += data.config.col) {
+          bookmarks.push(data.bookmarks.slice(i, i + data.config.col));
+        }
+        console.log(bookmarks);
+
+        const listDom = document.querySelector("#list");
+        listDom.innerHTML = "";
+        let html = "";
+        bookmarks.forEach((row) => {
+          html += "<tr>";
+          row.forEach((bm) => {
+            html += "<td>";
+            html += `<a href="${bm.url}">`;
+            html += `<img src="${getFaviconUrl(
+              bm.url
+            )}" width="64" height="64">`;
+            html += `<br/>${bm.title}`;
+            html += "</a></td>";
+          });
+          html += "</tr>";
+        });
+        listDom.innerHTML = html;
+      }
+
+      function saveToLocalStorage() {
+        localStorage.setItem("bookmarks", JSON.stringify(data));
+      }
+
+      function init() {
+        const storedData = JSON.parse(localStorage.getItem("bookmarks"));
+        if (storedData) {
+          Object.assign(data, storedData);
+        }
+
+        draw();
+      }
+
+      window.addEventListener("load", (event) => {
+        init();
+      });
+    </script>
+  </head>
+  <body class="container py-4">
+    <details class="mb-4">
+      <summary>config</summary>
+      <h2>Add Bookmark</h2>
+      <form class="row g-3 align-items-center mb-3" onsubmit="addBookmark(event)">
+        <div class="col-auto">
+          <label for="add_url" class="col-form-label">URL:</label>
+        </div>
+        <div class="col-auto">
+          <input type="text" id="add_url" class="form-control" required />
+        </div>
+        <div class="col-auto">
+          <label for="add_title" class="col-form-label">TITLE:</label>
+        </div>
+        <div class="col-auto">
+          <input type="text" id="add_title" class="form-control" required />
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+      <h2>Set Layout</h2>
+      <form class="row g-3 align-items-center mb-3" onsubmit="setLayout(event)">
+        <div class="col-auto">
+          <label for="col" class="col-form-label">NUMBER OF COLUMNS:</label>
+        </div>
+        <div class="col-auto">
+          <input type="number" id="col" class="form-control" required min="3" />
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-secondary">Set</button>
+        </div>
+      </form>
+      <h2>Full Configs</h2>
+      <form class="mb-3" onsubmit="setRaw(event)">
+        <p>Copy and paste to share config other devices.</p>
+        <textarea id="raw" class="form-control mb-2"></textarea>
+        <button type="submit" class="btn btn-secondary">Set</button>
+      </form>
+    </details>
+    <hr />
+    <table class="table table-bordered table-striped text-center align-middle">
+      <tbody id="list"></tbody>
+    </table>
+  </body>
+</html>
