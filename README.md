@@ -1,5 +1,5 @@
 # simple-web-bookmark
-![screenshot](doc/screenshot.png)
+![screenshot](.readme/screenshot.png)
 simple web bookmark for new tab page
 
 ## Motivation
@@ -13,5 +13,5 @@ simple web bookmark for new tab page
 - Import/export bookmarks
 
 ## Usage
-- Deploy `src/index.html` to your web server
+- Deploy `docs/index.html` to your web server
 - Or run test server `npm run dev`
