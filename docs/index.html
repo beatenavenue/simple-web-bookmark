@@ -60,7 +60,7 @@
 
         try {
           const colDom = document.querySelector("#col");
-          const col = colDom.value;
+          const col = Number(colDom.value);
           data.config = { col };
 
           saveToLocalStorage();
