@@ -15,3 +15,4 @@ simple web bookmark for new tab page
 ## Usage
 - Deploy `docs/index.html` to your web server
 - Or run test server `npm run dev`
+- [github pages here](https://beatenavenue.github.io/simple-web-bookmark/)
