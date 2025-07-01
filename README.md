@@ -16,3 +16,4 @@ simple web bookmark for new tab page
 - Deploy `docs/index.html` to your web server
 - Or run test server `npm run dev`
 - [github pages here](https://beatenavenue.github.io/simple-web-bookmark/)
+  - For Chrome family browser: use like a speeddial with new tab extension [(ex)](https://chromewebstore.google.com/detail/icpgjfneehieebagbmdbhnlpiopdcmna)
