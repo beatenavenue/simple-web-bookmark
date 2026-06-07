@@ -97,10 +97,11 @@
         const listDom = document.querySelector("#list");
         listDom.innerHTML = "";
         let html = "";
+        const width = 100 / data.config.col;
         bookmarks.forEach((row) => {
           html += "<tr>";
           row.forEach((bm) => {
-            html += "<td>";
+            html += `<td style="width: ${width}%; word-break: break-all;">`;
             html += `<a href="${bm.url}">`;
             html += `<img src="${getFaviconUrl(
               bm.url
@@ -175,7 +176,7 @@
       </p>
     </details>
     <hr />
-    <table class="table table-bordered table-striped text-center align-middle">
+    <table class="table table-bordered table-striped text-center align-middle" style="table-layout: fixed;">
       <tbody id="list"></tbody>
     </table>
   </body>
