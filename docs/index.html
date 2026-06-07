@@ -103,9 +103,9 @@
           row.forEach((bm) => {
             html += `<td style="width: ${width}%; word-break: break-all;">`;
             html += `<a href="${bm.url}">`;
-            html += `<img src="${getFaviconUrl(
-              bm.url
-            )}" width="64" height="64">`;
+            html += `<img src="${
+              bm.icon ? bm.icon : getFaviconUrl(bm.url)
+            }" width="64" height="64">`;
             html += `<br/>${bm.title}`;
             html += "</a></td>";
           });
